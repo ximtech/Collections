@@ -43,7 +43,7 @@ target_link_libraries(${PROJECT_NAME}.elf Collections)
 
 ### Stack Vector
 
-Fixed size of generic type `Vector`. This implementation not allocate heap memory, but need compile time known capacity
+Fixed size of generic type `Vector`. This implementation don't allocate heap memory, but need compile time known capacity
 
 ### Single header include
 
@@ -361,7 +361,7 @@ While insert the duplicate key, it will replace the element of the corresponding
 
 ### Stack HashMap
 
-Fixed size of generic type `Map`. This implementation not allocate heap memory, but need compile time known capacity
+Fixed size of generic type `Map`. This implementation don't allocate heap memory, but need compile time known capacity
 
 ### Single header include
 
@@ -550,7 +550,7 @@ No guarantee is made as to the iteration order of the set which means that the i
 
 ### Stack HashSet
 
-Fixed size of generic type `HashSet`. This implementation not allocate heap memory, but need compile time known capacity
+Fixed size of generic type `HashSet`. This implementation don't allocate heap memory, but need compile time known capacity
 
 ### Single header include
 
