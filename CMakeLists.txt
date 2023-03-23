@@ -12,7 +12,8 @@ set(SOURCE_FILES
         include/HashMap.h
         include/BufferVector.h
         include/BufferHashMap.h
-        include/BufferHashSet.h)
+        include/BufferHashSet.h
+        include/BufferVectorDeque.h)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "")

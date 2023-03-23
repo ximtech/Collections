@@ -31,11 +31,11 @@ jobs:
       working-directory: ${{github.workspace}}/Tests/cmake-build-debug
       run: ./Tests
 
-#    - name: Upload coverage to Codecov
-#      uses: codecov/codecov-action@v3
-#      with:
-#        gcov: true
-#        files: "*Vector.c.gcov, *Vector.h.gcov, *BufferVector.h.gcov, *BufferHashSet.h.gcov, *BufferHashMap.h.gcov"
-#        token: ${{ secrets.CODECOV_TOKEN }}
-#        fail_ci_if_error: true
-#        verbose: true
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        gcov: true
+        files: "*Vector.c.gcov, *Vector.h.gcov, *BufferVector.h.gcov, *BufferHashSet.h.gcov, *BufferHashMap.h.gcov"
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        verbose: true
