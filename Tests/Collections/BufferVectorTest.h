@@ -17,7 +17,7 @@ CREATE_VECTOR_TYPE(User, user, userAgeComparator);
 CREATE_VECTOR_TYPE(str, str, strNaturalSortComparator);
 
 
-void assertIntVec(intVector *intVec, int size, int capacity) {
+static void assertIntVec(intVector *intVec, int size, int capacity) {
     assert_uint32(intVec->size, ==, size);
     assert_uint32(intVec->capacity, ==, capacity);
     assert_not_null(intVec->items);

@@ -11,6 +11,7 @@ Collection library provides efficient implementations of the most common general
 1. [Vector](#vector)
 2. [HashMap](#HashMap)
 3. [HashSet](#HashSet)
+4. [VectorDeque](#VectorDeque)
 
 ### Features
 
@@ -685,4 +686,176 @@ charSetIterator iter = charSetIter(charSet);
 while (charSetHasNext(&iter)) {
   printf("Value: [%c]\n", iter.value);
 }
+```
+## VectorDeque
+
+Vector Double Ended Queue. This is a special kind of array that grows and allows users to add or remove an element from both sides of the queue.
+
+### Stack VectorDeque
+
+Fixed size of generic type `VecDeq`. This implementation don't allocate heap memory, but need compile time known capacity
+
+### Single header include
+
+```c
+#include "BufferVectorDeque.h"
+```
+
+### Define VectorDeque type
+
+Provide:
+1. Set stored elements type
+3. Optionally: Set value alias, if not provided then type will be used as prefix name
+4. Value comparator function pointer(for most standard data types it generates automatically)
+   Example:
+```c
+CREATE_VECTOR_DEQ_TYPE(int);   // creates `intVecDeq` type that stores `int` values, with default numeric key comparator
+CREATE_VECTOR_DEQ_TYPE(int8_t, i8);    // creates `i8VecDeq` with value name alias and default comparator
+CREATE_VECTOR_DEQ_TYPE(char*, str, strComparator);  // custom comparator function
+```
+
+#### Best practices
+
+Use `typedef` for shortcut configuration. Strings of `char*` is widely used so, there is a predefined functions
+```c
+typedef char* str;
+CREATE_VECTOR_DEQ_TYPE(str);    // creates `strVecDeq` type and auto assigns predefined `strComparator()``
+```
+
+#### Custom type as VectorDeque value
+```c
+typedef struct User {   // Some custom type
+    char *name;
+    int age;
+} User;
+
+CREATE_CUSTOM_COMPARATOR(user, User, one, two, strComparator(one.name, two.name)); // creates inline comparator `userComparator()` function, used for user identity
+
+typedef User user;
+CREATE_VECTOR_DEQ_TYPE(user); // auto assigns previous declared comparator and hash code functions
+```
+
+### Method and type naming conventions
+
+1. When only type provided, then methods will be generated like: `<type>VecDeq...()` and `is<type>VecDeq...()` with prefix
+2. When type alias(name) provided, then methods will be generated like: `<type_name>VecDeq...()` and `is<type_name>VecDeq...()` with prefix
+3. HashSet `typedef` naming: `<type>VecDeq` and same for type alias `<name>VecDeq`
+
+### Base VectorDeque creation
+
+When comparator and all needed types provided, then `VectorDeque` can be instantiated
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ(int, 4); // empty intVecDeq with max length of 4
+floatVecDeq *flVectDeq = NEW_VECTOR_DEQ_8(float); // shorter version from predefined macro
+i8VecDeq *i8VectDeq = NEW_VECTOR_DEQ_128(i8); // bigger, check available defines in `BufferVectorDeque.h'
+```
+
+### Add elements to head of vector
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddFirst(intVectDeq, 1);
+intVecDeqAddFirst(intVectDeq, 2);
+intVecDeqAddFirst(intVectDeq, 3);
+intVecDeqAddFirst(intVectDeq, 4);
+assert(intVecDeqAddFirst(intVectDeq, 5)); // `false` when out of capacity
+```
+
+### Add elements to the tail of vector
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddLast(intVectDeq, 1);
+intVecDeqAddLast(intVectDeq, 2);
+intVecDeqAddLast(intVectDeq, 3);
+intVecDeqAddLast(intVectDeq, 4);
+assert(intVecDeqAddLast(intVectDeq, 5)); // `false` when out of capacity
+```
+
+### Get first element
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddFirst(intVectDeq, 1);
+assert(intVecDeqGetFirst(intVectDeq) == 1);
+```
+
+### Get last element
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddLast(intVectDeq, 1);
+assert(intVecDeqGetLast(intVectDeq) == 1);
+```
+
+### Remove first
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddFirst(intVectDeq, 1);
+assert(intVecDeqRemoveFirst(intVectDeq) == 1);
+assert(intVecDeqSize(intVectDeq) == 0);
+```
+
+### Remove last
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddLast(intVectDeq, 1);
+assert(intVecDeqRemoveLast(intVectDeq) == 1);
+assert(intVecDeqSize(intVectDeq) == 0);
+```
+
+### Check for emptiness
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+assert(isintVecDeqEmpty(intVectDeq) == true);
+assert(isintVecDeqNotEmpty(intVectDeq) == false);
+
+intVecDeqAddFirst(intVectDeq, 1);
+assert(isintVecDeqEmpty(intVectDeq) == false);
+assert(isintVecDeqNotEmpty(intVectDeq) == true);
+```
+
+### Contains element
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_4(int);
+intVecDeqAddFirst(intVectDeq, 1);
+intVecDeqAddLast(intVectDeq, 2);
+
+assert(intVecDeqContains(intVectDeq, 1) == true);
+assert(intVecDeqContains(intVectDeq, 2) == true);
+assert(intVecDeqContains(intVectDeq, 3) == false);
+```
+
+### Remove first occurrence
+Remove and shift vector from head
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
+intVecDeqAddFirst(intVectDeq, 1);
+intVecDeqAddFirst(intVectDeq, 2);
+intVecDeqAddFirst(intVectDeq, 3);
+intVecDeqAddFirst(intVectDeq, 4);
+intVecDeqAddFirst(intVectDeq, 5);
+intVecDeqAddFirst(intVectDeq, 6);
+
+intVecDeqRemoveFirstOccur(intVectDeq, 3);
+assert(intVectDeq->items[7] == 1);
+assert(intVectDeq->items[6] == 2);
+assert(intVectDeq->items[5] == 4);
+assert(intVectDeq->items[4] == 5);
+assert(intVectDeq->items[3] == 6);
+```
+
+### Remove last occurrence
+Remove and shift vector from tail
+```c
+intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
+intVecDeqAddLast(intVectDeq, 1);
+intVecDeqAddLast(intVectDeq, 2);
+intVecDeqAddLast(intVectDeq, 3);
+intVecDeqAddLast(intVectDeq, 4);
+intVecDeqAddLast(intVectDeq, 5);
+intVecDeqAddLast(intVectDeq, 6);
+
+intVecDeqRemoveLastOccur(intVectDeq, 3);
+assert(intVectDeq->items[0] == 1);
+assert(intVectDeq->items[1] == 2);
+assert(intVectDeq->items[2] == 4);
+assert(intVectDeq->items[3] == 5);
+assert(intVectDeq->items[4] == 6);
 ```

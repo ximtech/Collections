@@ -13,7 +13,7 @@ CREATE_HASH_MAP_TYPE(str, str);
 CREATE_HASH_MAP_TYPE(user, int);
 
 
-void assertIntMap(int_intMap *intMap, int size, int capacity) {
+static void assertIntMap(int_intMap *intMap, int size, int capacity) {
     assert_uint32(intMap->size, ==, size);
     assert_uint32(intMap->capacity, ==, capacity);
     assert_not_null(intMap->entries);

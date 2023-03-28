@@ -14,7 +14,7 @@ CREATE_HASH_SET_TYPE(str);
 CREATE_HASH_SET_TYPE(user);
 
 
-void assertIntSet(intHashSet *intSet, int size, int capacity) {
+static void assertIntSet(intHashSet *intSet, int size, int capacity) {
     assert_uint32(intSet->size, ==, size);
     assert_uint32(intSet->capacity, ==, capacity);
     assert_not_null(intSet->entries);

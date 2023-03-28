@@ -3,6 +3,7 @@
 #include "Collections/BufferVectorTest.h"
 #include "Collections/BufferHashMapTest.h"
 #include "Collections/BufferHashSetTest.h"
+#include "Collections/BufferVectorDequeTest.h"
 
 
 int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)]) {
@@ -12,7 +13,8 @@ int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)]) {
             bufferVectorTestSuite,
             hashMapTestSuite,
             bufferHashMapTestSuite,
-            bufferHashSetTestSuite
+            bufferHashSetTestSuite,
+            bufferVectorDeqTestSuite
     };
 
     MunitSuite baseSuite = {

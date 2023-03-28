@@ -35,7 +35,7 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         gcov: true
-        files: "*Vector.c.gcov, *HashMap.c.gcov, *BufferVectorTest.h.gcov, *BufferHashSetTest.h.gcov, *BufferHashMapTest.h.gcov"
+        files: "*Vector.c.gcov, *HashMap.c.gcov, *BufferVectorTest.h.gcov, *BufferHashSetTest.h.gcov, *BufferHashMapTest.h.gcov, *BufferVectorDequeTest.h.gcov"
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
         verbose: true
