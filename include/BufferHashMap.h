@@ -44,7 +44,7 @@ typedef struct HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) {    \
     uint32_t index;                                                 \
 } HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME);                  \
                                                                     \
-static HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, VALUE_NAME, BufferMap)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entries, uint32_t capacity) { \
+static inline HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, VALUE_NAME, BufferMap)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entries, uint32_t capacity) { \
     if (map == NULL) return NULL;       \
     map->entries = entries;             \
     map->size = 0;                      \
@@ -60,7 +60,7 @@ static HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, V
     return map;                                     \
 }                                                   \
 \
-static HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
+static inline HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
     uint32_t hash = HASH_FUN(key);                              \
     uint32_t index = hash % map->capacity;                      \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *tombstone = NULL;     \
@@ -82,7 +82,7 @@ static HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(find, KEY_
     }                                                           \
 }                                                               \
 \
-static bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAdd)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE value) {   \
+static inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAdd)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE value) {   \
     if (map != NULL && (map->size < (map->capacity / HASH_MAP_EXPAND_FACTOR))) {                           \
         HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key);                                                                                                 \
         bool alreadyExist = !entry->isEmptySlot; \
@@ -102,7 +102,7 @@ static bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAdd)(HASH_MAP_TYPEDEF(KEY_N
     return false;                           \
 }                                           \
 \
-static HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, VALUE_NAME, BufferMapOf)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entries, uint32_t capacity, uint32_t size) { \
+static inline HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, VALUE_NAME, BufferMapOf)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entries, uint32_t capacity, uint32_t size) { \
     if (map == NULL || entries == NULL) return NULL;                                                \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) tmpEntries[size];                                  \
     memcpy(tmpEntries, entries, sizeof(tmpEntries));                                                \
@@ -113,24 +113,24 @@ static HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_NAME, V
     return map;                                                                                     \
 }                                                                                                   \
 \
-static inline uint32_t HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapSize)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
+static inline inline uint32_t HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapSize)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
     return map != NULL ? map->size : 0; \
 }   \
 \
-static inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
+static inline inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
     return map != NULL ? map->size == 0 : true; \
 }   \
 \
-static inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {   \
+static inline inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {   \
     return !HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(map);        \
 }   \
 \
-static inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapContains)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {                                                                                                         \
+static inline inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapContains)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {                                                                                                         \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key); \
     return !entry->isEmptySlot;     \
 }  \
 \
-static VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGet)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {    \
+static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGet)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {    \
     if (HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(map)) {                                                          \
         HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key);  \
         return !entry->isEmptySlot ? entry->value : (VALUE_TYPE) {0};       \
@@ -138,12 +138,12 @@ static VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGet)(HASH_MAP_TYPEDEF
     return (VALUE_TYPE) {0};        \
 }                                   \
 \
-static VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGetOrDefault)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE defaultValue) {  \
+static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGetOrDefault)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE defaultValue) {  \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key); \
     return !entry->isEmptySlot ? entry->value : defaultValue;    \
 }   \
 \
-static VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapRemove)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
+static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapRemove)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
     if (HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(map)) {                                                          \
         HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key);  \
         if (entry->isEmptySlot) return (VALUE_TYPE) {0};                 \
@@ -159,7 +159,7 @@ static VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapRemove)(HASH_MAP_TYPE
     return (VALUE_TYPE) {0};                \
 }                                           \
 \
-static void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAddAll)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *fromMap, HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *toMap) {  \
+static inline void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAddAll)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *fromMap, HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *toMap) {  \
     for (uint32_t i = 0; i < fromMap->capacity; i++) {                                        \
         HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = &fromMap->entries[i];           \
         if (!entry->isEmptySlot) {                                                            \
@@ -168,7 +168,7 @@ static void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapAddAll)(HASH_MAP_TYPEDEF(KE
     }       \
 }           \
 \
-static void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapClear)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {    \
+static inline void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapClear)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {    \
     if (map != NULL && map->entries != NULL) {          \
         for (uint32_t i = 0; i < map->capacity; i++) {  \
             map->entries[i].key = (KEY_TYPE) {0};       \
@@ -181,12 +181,12 @@ static void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapClear)(HASH_MAP_TYPEDEF(KEY
     }                                                   \
 }                                                       \
 \
-static inline HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapIter)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) { \
+static inline inline HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapIter)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) { \
     HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) iterator = {.map = map, .index = 0};    \
     return iterator;    \
 }                       \
 \
-static bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapHasNext)(HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) *iterator) { \
+static inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapHasNext)(HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) *iterator) { \
     if (iterator != NULL && iterator->map != NULL) {        \
         HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map = iterator->map;  \
         while (iterator->index < map->capacity) {           \

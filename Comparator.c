@@ -59,7 +59,7 @@ int strNaturalSortComparator(const char *one, const char *two) {
         two += skipLeadingSpacesOrZeroes(two, &numberOfZeroesTwo);
 
         // Process run of digits
-        if (isdigit(*one) && isdigit(*two)) {
+        if (isdigit((int) *one) && isdigit((int) *two)) {
             int bias = compareRight(one, two);
             if (bias != 0) {
                 return bias;
@@ -87,7 +87,7 @@ int strNaturalSortComparator(const char *one, const char *two) {
 
 static uint32_t skipLeadingSpacesOrZeroes(const char* text, int32_t *numberOfZeroes) {
     uint32_t index = 0;
-    while (isspace(*text) || *text == '0') {
+    while (isspace((int) *text) || *text == '0') {
         if (*text == '0') {
             *numberOfZeroes = *numberOfZeroes + 1;
         } else {

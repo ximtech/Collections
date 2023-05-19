@@ -42,7 +42,7 @@ typedef struct HASH_SET_ITERATOR_TYPEDEF(NAME) {    \
     uint32_t index;                                 \
 } HASH_SET_ITERATOR_TYPEDEF(NAME);                  \
                                                     \
-static HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSet)(HASH_SET_TYPEDEF(NAME) *set, HASH_SET_ENTRY_TYPEDEF(NAME) *entries, uint32_t capacity) { \
+static inline HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSet)(HASH_SET_TYPEDEF(NAME) *set, HASH_SET_ENTRY_TYPEDEF(NAME) *entries, uint32_t capacity) { \
     if (set == NULL) return NULL;       \
     set->entries = entries;             \
     set->size = 0;                      \
@@ -57,7 +57,7 @@ static HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSet)(HASH_SET_T
     return set;                                 \
 }                                               \
                                                 \
-static HASH_SET_ENTRY_TYPEDEF(NAME) * HASH_SET_METHOD(find, NAME, SetEntry)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
+static inline HASH_SET_ENTRY_TYPEDEF(NAME) * HASH_SET_METHOD(find, NAME, SetEntry)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
     uint32_t hash = HASH_FUN(value);                    \
     uint32_t index = hash % set->capacity;              \
     HASH_SET_ENTRY_TYPEDEF(NAME) *tombstone = NULL;     \
@@ -79,7 +79,7 @@ static HASH_SET_ENTRY_TYPEDEF(NAME) * HASH_SET_METHOD(find, NAME, SetEntry)(HASH
     }                                                           \
 }                                                               \
 \
-static bool HASH_SET_METHOD(NAME, SetAdd)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) {   \
+static inline bool HASH_SET_METHOD(NAME, SetAdd)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) {   \
     if (set != NULL && (set->size < (set->capacity / HASH_SET_EXPAND_FACTOR))) {                  \
         HASH_SET_ENTRY_TYPEDEF(NAME) *entry = HASH_SET_METHOD(find, NAME, SetEntry)(set, value);                                                               \
         bool alreadyExist = !entry->isEmptySlot;    \
@@ -98,7 +98,7 @@ static bool HASH_SET_METHOD(NAME, SetAdd)(HASH_SET_TYPEDEF(NAME) *set, TYPE valu
     return false;                           \
 }                                           \
 \
-static HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSetOf)(HASH_SET_TYPEDEF(NAME) *set, HASH_SET_ENTRY_TYPEDEF(NAME) *entries, uint32_t capacity, uint32_t size) { \
+static inline HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSetOf)(HASH_SET_TYPEDEF(NAME) *set, HASH_SET_ENTRY_TYPEDEF(NAME) *entries, uint32_t capacity, uint32_t size) { \
     if (set == NULL || entries == NULL) return NULL;    \
     HASH_SET_ENTRY_TYPEDEF(NAME) tmpEntries[size];      \
     memcpy(tmpEntries, entries, sizeof(tmpEntries));    \
@@ -126,7 +126,7 @@ static inline bool HASH_SET_METHOD(NAME, SetContains)(HASH_SET_TYPEDEF(NAME) *se
     return !entry->isEmptySlot;     \
 }  \
 \
-static bool HASH_SET_METHOD(NAME, SetRemove)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
+static inline bool HASH_SET_METHOD(NAME, SetRemove)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
     if (HASH_SET_METHOD(is, NAME, SetNotEmpty)(set)) {                                                          \
         HASH_SET_ENTRY_TYPEDEF(NAME) *entry = HASH_SET_METHOD(find, NAME, SetEntry)(set, value);  \
         if (entry->isEmptySlot) return false;   \
@@ -140,7 +140,7 @@ static bool HASH_SET_METHOD(NAME, SetRemove)(HASH_SET_TYPEDEF(NAME) *set, TYPE v
     return false;                               \
 }                                               \
 \
-static void HASH_SET_METHOD(NAME, SetAddAll)(HASH_SET_TYPEDEF(NAME) *fromSet, HASH_SET_TYPEDEF(NAME) *toSet) {  \
+static inline void HASH_SET_METHOD(NAME, SetAddAll)(HASH_SET_TYPEDEF(NAME) *fromSet, HASH_SET_TYPEDEF(NAME) *toSet) {  \
     for (uint32_t i = 0; i < fromSet->capacity; i++) {                        \
         HASH_SET_ENTRY_TYPEDEF(NAME) *entry = &fromSet->entries[i];           \
         if (!entry->isEmptySlot) {                                            \
@@ -149,7 +149,7 @@ static void HASH_SET_METHOD(NAME, SetAddAll)(HASH_SET_TYPEDEF(NAME) *fromSet, HA
     }                                                                         \
 }                                                                    \
 \
-static void HASH_SET_METHOD(NAME, SetClear)(HASH_SET_TYPEDEF(NAME) *set) {    \
+static inline void HASH_SET_METHOD(NAME, SetClear)(HASH_SET_TYPEDEF(NAME) *set) {    \
     if (set != NULL && set->entries != NULL) {          \
         for (uint32_t i = 0; i < set->capacity; i++) {  \
             set->entries[i].value = (TYPE) {0};         \
@@ -166,7 +166,7 @@ static inline HASH_SET_ITERATOR_TYPEDEF(NAME) HASH_SET_METHOD(NAME, SetIter)(HAS
     return iterator;    \
 }                       \
 \
-static bool HASH_SET_METHOD(NAME, SetHasNext)(HASH_SET_ITERATOR_TYPEDEF(NAME) *iterator) { \
+static inline bool HASH_SET_METHOD(NAME, SetHasNext)(HASH_SET_ITERATOR_TYPEDEF(NAME) *iterator) { \
     if (iterator != NULL && iterator->set != NULL) {        \
         HASH_SET_TYPEDEF(NAME) *set = iterator->set;        \
         while (iterator->index < set->capacity) {           \
@@ -184,7 +184,7 @@ static bool HASH_SET_METHOD(NAME, SetHasNext)(HASH_SET_ITERATOR_TYPEDEF(NAME) *i
     return false;                   \
 }                                                                    \
                                                                      \
-static bool HASH_SET_METHOD(NAME, SetContainsAll)(HASH_SET_TYPEDEF(NAME) *fromSet, HASH_SET_TYPEDEF(NAME) *compareSet) { \
+static inline bool HASH_SET_METHOD(NAME, SetContainsAll)(HASH_SET_TYPEDEF(NAME) *fromSet, HASH_SET_TYPEDEF(NAME) *compareSet) { \
     HASH_SET_ITERATOR_TYPEDEF(NAME) iterator = HASH_SET_METHOD(NAME, SetIter)(compareSet); \
     while (HASH_SET_METHOD(NAME, SetHasNext)(&iterator)) {                        \
         if (!HASH_SET_METHOD(NAME, SetContains)(fromSet, iterator.value)) {       \

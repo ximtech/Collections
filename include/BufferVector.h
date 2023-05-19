@@ -29,7 +29,7 @@ static inline int NAME ##_compare(const void *a, const void *b) {      \
     return COMPARE_FUN(valueA, valueB);                 \
 }                                     \
 \
-static VECTOR_TYPEDEF(NAME) * new ## NAME ## BuffVector(VECTOR_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity) { \
+static inline VECTOR_TYPEDEF(NAME) * new ## NAME ## BuffVector(VECTOR_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity) { \
     if (vector == NULL || capacity == 0) return NULL;       \
     vector->size = 0;                                       \
     vector->capacity = capacity;                            \
@@ -37,7 +37,7 @@ static VECTOR_TYPEDEF(NAME) * new ## NAME ## BuffVector(VECTOR_TYPEDEF(NAME) *ve
     return vector;                                          \
 }                                      \
 \
-static VECTOR_TYPEDEF(NAME) *new ## NAME ## BuffVectorOf(VECTOR_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity, uint32_t size) { \
+static inline VECTOR_TYPEDEF(NAME) *new ## NAME ## BuffVectorOf(VECTOR_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity, uint32_t size) { \
     vector = new ## NAME ## BuffVector(vector, buffer, capacity); \
     if (vector == NULL) {                                         \
         return vector;                                            \
@@ -46,7 +46,7 @@ static VECTOR_TYPEDEF(NAME) *new ## NAME ## BuffVectorOf(VECTOR_TYPEDEF(NAME) *v
     return vector;                                                \
 }                                      \
 \
-static bool VECTOR_METHOD(NAME, Add)(VECTOR_TYPEDEF(NAME) *vector, TYPE item) { \
+static inline bool VECTOR_METHOD(NAME, Add)(VECTOR_TYPEDEF(NAME) *vector, TYPE item) { \
     if (vector != NULL && vector->size < vector->capacity) {    \
         vector->items[vector->size++] = item;                   \
         return true;                                            \
@@ -54,15 +54,15 @@ static bool VECTOR_METHOD(NAME, Add)(VECTOR_TYPEDEF(NAME) *vector, TYPE item) { 
     return false;                                               \
 }                                      \
 \
-static TYPE VECTOR_METHOD(NAME, Get)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index) {  \
+static inline TYPE VECTOR_METHOD(NAME, Get)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index) {  \
     return (vector != NULL && index < vector->size) ? vector->items[index] : (TYPE) {0};    \
 }                                                        \
 \
-static TYPE VECTOR_METHOD(NAME, GetOrDefault)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE defaultValue) {  \
+static inline TYPE VECTOR_METHOD(NAME, GetOrDefault)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE defaultValue) {  \
     return (vector != NULL && index < vector->size) ? vector->items[index] : defaultValue;    \
 }                                                        \
 \
-static bool VECTOR_METHOD(NAME, Put)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE item) {   \
+static inline bool VECTOR_METHOD(NAME, Put)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE item) {   \
     if (vector != NULL && index < vector->size) {   \
         vector->items[index] = item;                \
         return true;                                \
@@ -70,7 +70,7 @@ static bool VECTOR_METHOD(NAME, Put)(VECTOR_TYPEDEF(NAME) *vector, uint32_t inde
     return false;                                   \
 }                                      \
 \
-static bool VECTOR_METHOD(NAME, AddAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE item) { \
+static inline bool VECTOR_METHOD(NAME, AddAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index, TYPE item) { \
     if (vector != NULL && index < vector->capacity) {               \
         if ((vector->size + 1) > vector->capacity) {                \
             return false;                                           \
@@ -85,7 +85,7 @@ static bool VECTOR_METHOD(NAME, AddAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t in
     return false;                                                   \
 }                                      \
 \
-static TYPE VECTOR_METHOD(NAME, RemoveAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index) {    \
+static inline TYPE VECTOR_METHOD(NAME, RemoveAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t index) {    \
     if (vector != NULL && index < vector->capacity) {                       \
         TYPE item = vector->items[index];                                   \
         for (uint32_t i = index + 1; i < vector->size; i++) {               \
@@ -97,19 +97,19 @@ static TYPE VECTOR_METHOD(NAME, RemoveAt)(VECTOR_TYPEDEF(NAME) *vector, uint32_t
     return (TYPE) {0};                                          \
 }                                      \
 \
-static bool VECTOR_METHOD(is, NAME, Empty)(VECTOR_TYPEDEF(NAME) *vector) {  \
+static inline bool VECTOR_METHOD(is, NAME, Empty)(VECTOR_TYPEDEF(NAME) *vector) {  \
     return (vector == NULL) || (vector->size == 0);     \
 }                                      \
 \
-static bool VECTOR_METHOD(is, NAME, NotEmpty)(VECTOR_TYPEDEF(NAME) *vector) {   \
+static inline bool VECTOR_METHOD(is, NAME, NotEmpty)(VECTOR_TYPEDEF(NAME) *vector) {   \
     return !VECTOR_METHOD(is, NAME, Empty)(vector);                             \
 }                                      \
 \
-static uint32_t VECTOR_METHOD(NAME, Size)(VECTOR_TYPEDEF(NAME) *vector) { \
+static inline uint32_t VECTOR_METHOD(NAME, Size)(VECTOR_TYPEDEF(NAME) *vector) { \
     return vector != NULL ? vector->size : 0;                       \
 }                                      \
 \
-static void VECTOR_METHOD(NAME, Clear)(VECTOR_TYPEDEF(NAME) *vector) {   \
+static inline void VECTOR_METHOD(NAME, Clear)(VECTOR_TYPEDEF(NAME) *vector) {   \
     if (vector != NULL) {                               \
         for (uint32_t i = 0; i < vector->size; i++) {   \
             vector->items[i] = (TYPE) {0};              \
@@ -118,7 +118,7 @@ static void VECTOR_METHOD(NAME, Clear)(VECTOR_TYPEDEF(NAME) *vector) {   \
     }                                                   \
 }                                      \
 \
-static bool VECTOR_METHOD(NAME, AddAll)(VECTOR_TYPEDEF(NAME) *vecDest, VECTOR_TYPEDEF(NAME) *vecSource) { \
+static inline bool VECTOR_METHOD(NAME, AddAll)(VECTOR_TYPEDEF(NAME) *vecDest, VECTOR_TYPEDEF(NAME) *vecSource) { \
     if (vecDest == NULL || vecSource == NULL) return false; \
     for (uint32_t i = 0; i < vecSource->size; i++) {        \
         TYPE item = VECTOR_METHOD(NAME, Get)(vecSource, i);        \
@@ -129,7 +129,7 @@ static bool VECTOR_METHOD(NAME, AddAll)(VECTOR_TYPEDEF(NAME) *vecDest, VECTOR_TY
     return true;                                            \
 }                                           \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, FromArray)(VECTOR_TYPEDEF(NAME) *vector, TYPE array[], uint32_t length) {  \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, FromArray)(VECTOR_TYPEDEF(NAME) *vector, TYPE array[], uint32_t length) {  \
     for (uint32_t i = 0; i < length; i++) {             \
         if (!VECTOR_METHOD(NAME, Add)(vector, array[i])) {     \
             return vector;                              \
@@ -138,7 +138,7 @@ static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, FromArray)(VECTOR_TYPEDEF(NAME
     return vector;                                      \
 }                                           \
 \
-static int32_t VECTOR_METHOD(NAME, IndexOf)(VECTOR_TYPEDEF(NAME) *vector, TYPE value) { \
+static inline int32_t VECTOR_METHOD(NAME, IndexOf)(VECTOR_TYPEDEF(NAME) *vector, TYPE value) { \
     if (vector == NULL) return -1;                          \
     for (int32_t i = 0; i < VECTOR_METHOD(NAME, Size)(vector); i++) {  \
         TYPE vectorValue = VECTOR_METHOD(NAME, Get)(vector, i);         \
@@ -149,11 +149,11 @@ static int32_t VECTOR_METHOD(NAME, IndexOf)(VECTOR_TYPEDEF(NAME) *vector, TYPE v
     return -1;                                              \
 }                                           \
 \
-static bool VECTOR_METHOD(NAME, Contains)(VECTOR_TYPEDEF(NAME) *vector, TYPE value) { \
+static inline bool VECTOR_METHOD(NAME, Contains)(VECTOR_TYPEDEF(NAME) *vector, TYPE value) { \
     return VECTOR_METHOD(NAME, IndexOf)(vector, value) >= 0; \
 }                                                        \
                                                          \
-static void VECTOR_METHOD(NAME, Reverse)(VECTOR_TYPEDEF(NAME) *vector) {   \
+static inline void VECTOR_METHOD(NAME, Reverse)(VECTOR_TYPEDEF(NAME) *vector) {   \
     uint32_t i = 0;                                 \
     uint32_t j = vector->size - 1;                  \
     while (j > i) {                                 \
@@ -165,12 +165,12 @@ static void VECTOR_METHOD(NAME, Reverse)(VECTOR_TYPEDEF(NAME) *vector) {   \
     }                                               \
 }                                                   \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Sort)(VECTOR_TYPEDEF(NAME) *vector) {   \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Sort)(VECTOR_TYPEDEF(NAME) *vector) {   \
     qsort(vector->items, vector->size, sizeof(TYPE), NAME ##_compare);      \
     return vector;   \
 }                                                        \
 \
-static bool VECTOR_METHOD(is, NAME, Equals)(VECTOR_TYPEDEF(NAME) *first, VECTOR_TYPEDEF(NAME) *second) { \
+static inline bool VECTOR_METHOD(is, NAME, Equals)(VECTOR_TYPEDEF(NAME) *first, VECTOR_TYPEDEF(NAME) *second) { \
     if (first == second) {              \
         return true;                    \
     }                                   \
@@ -186,7 +186,7 @@ static bool VECTOR_METHOD(is, NAME, Equals)(VECTOR_TYPEDEF(NAME) *first, VECTOR_
     return true;                        \
 }                   \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, RemoveDup)(VECTOR_TYPEDEF(NAME) *vector) {   \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, RemoveDup)(VECTOR_TYPEDEF(NAME) *vector) {   \
     if (vector == NULL) return NULL;    \
     qsort(vector->items, vector->size, sizeof(TYPE), NAME ##_compare);   \
     uint32_t j = 0;                                      \
@@ -206,7 +206,7 @@ static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, RemoveDup)(VECTOR_TYPEDEF(NAME
     return vector;                                       \
 }                                                        \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Union)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {  \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Union)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {  \
     if (destVector == NULL || sourceVector == NULL) return NULL;            \
     for (uint32_t i = 0; i < sourceVector->size; i++) {                     \
         VECTOR_METHOD(NAME, Add)(destVector, VECTOR_METHOD(NAME,Get)(sourceVector, i));  \
@@ -214,7 +214,7 @@ static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Union)(VECTOR_TYPEDEF(NAME) *d
     return VECTOR_METHOD(NAME, RemoveDup)(destVector);                             \
 }                                                        \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Intersect)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {   \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Intersect)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {   \
     if (destVector == NULL || sourceVector == NULL) return NULL;                    \
     qsort(destVector->items, destVector->size, sizeof(TYPE), NAME ##_compare);      \
     qsort(sourceVector->items, sourceVector->size, sizeof(TYPE), NAME ##_compare);  \
@@ -239,7 +239,7 @@ static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Intersect)(VECTOR_TYPEDEF(NAME
     return VECTOR_METHOD(NAME, RemoveDup)(destVector);                         \
 }   \
 \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Subtract)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {   \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Subtract)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {   \
     if (destVector == NULL || sourceVector == NULL) return NULL;            \
     qsort(destVector->items, destVector->size, sizeof(TYPE), NAME ##_compare);      \
     qsort(sourceVector->items, sourceVector->size, sizeof(TYPE), NAME ##_compare);  \
@@ -272,7 +272,7 @@ static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Subtract)(VECTOR_TYPEDEF(NAME)
     return destVector;          \
 }               \
                                                          \
-static VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Disjunction)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {    \
+static inline VECTOR_TYPEDEF(NAME) * VECTOR_METHOD(NAME, Disjunction)(VECTOR_TYPEDEF(NAME) *destVector, VECTOR_TYPEDEF(NAME) *sourceVector) {    \
     if (VECTOR_METHOD(NAME, AddAll)(destVector, sourceVector)) {                           \
         qsort(destVector->items, destVector->size, sizeof(TYPE), NAME ##_compare);   \
         uint32_t index = 0;                                                         \

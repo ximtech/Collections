@@ -27,7 +27,7 @@ typedef struct VECTOR_DEQUE_TYPEDEF(NAME) {  \
     uint32_t capacity;                 \
 } VECTOR_DEQUE_TYPEDEF(NAME);          \
 \
-static VECTOR_DEQUE_TYPEDEF(NAME) * new ## NAME ## BuffVecDeq(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity) { \
+static inline VECTOR_DEQUE_TYPEDEF(NAME) * new ## NAME ## BuffVecDeq(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE *buffer, uint32_t capacity) { \
     if (vector == NULL || capacity == 0) return NULL;       \
     vector->size = 0;                                       \
     vector->capacity = capacity;                            \
@@ -37,7 +37,7 @@ static VECTOR_DEQUE_TYPEDEF(NAME) * new ## NAME ## BuffVecDeq(VECTOR_DEQUE_TYPED
     return vector;                                          \
 }                                      \
 \
-static bool VECTOR_DEQUE_METHOD(NAME, AddFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE item) { \
+static inline bool VECTOR_DEQUE_METHOD(NAME, AddFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE item) { \
     if (vector != NULL && (vector->head - 1) != vector->tail) { \
         vector->items[--vector->head] = item;                   \
         vector->size++;                                         \
@@ -46,7 +46,7 @@ static bool VECTOR_DEQUE_METHOD(NAME, AddFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vect
     return false;                                               \
 }                                      \
 \
-static bool VECTOR_DEQUE_METHOD(NAME, AddLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE item) { \
+static inline bool VECTOR_DEQUE_METHOD(NAME, AddLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE item) { \
     if (vector != NULL && vector->head != (vector->tail + 1)) { \
         vector->items[++vector->tail] = item;                   \
         vector->size++;                                         \
@@ -55,15 +55,15 @@ static bool VECTOR_DEQUE_METHOD(NAME, AddLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vecto
     return false;                                               \
 }                                                               \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, GetFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, GetFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
     return vector != NULL && vector->head < vector->capacity ? vector->items[vector->head] : (TYPE) {0};    \
 } \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, GetLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, GetLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
     return vector != NULL && vector->tail > -1 ? vector->items[vector->tail] : (TYPE) {0};    \
 }                                                              \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {    \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {    \
     if (vector != NULL && vector->head != vector->capacity) {               \
         TYPE item = vector->items[vector->head];                            \
         vector->items[vector->head] = (TYPE) {0};                           \
@@ -74,7 +74,7 @@ static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirst)(VECTOR_DEQUE_TYPEDEF(NAME) *v
     return (TYPE) {0};                                                      \
 }                                      \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {    \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, RemoveLast)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {    \
     if (vector != NULL && vector->tail >= 0) {                              \
         TYPE item = vector->items[vector->tail];                            \
         vector->items[vector->tail] = (TYPE) {0};                           \
@@ -85,19 +85,19 @@ static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveLast)(VECTOR_DEQUE_TYPEDEF(NAME) *ve
     return (TYPE) {0};                                                      \
 }                                                                           \
 \
-static bool VECTOR_DEQUE_METHOD(is, NAME, Empty)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
+static inline bool VECTOR_DEQUE_METHOD(is, NAME, Empty)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {  \
     return (vector == NULL) || (vector->size == 0);     \
 }                                      \
 \
-static bool VECTOR_DEQUE_METHOD(is, NAME, NotEmpty)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {   \
+static inline bool VECTOR_DEQUE_METHOD(is, NAME, NotEmpty)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {   \
     return !VECTOR_DEQUE_METHOD(is, NAME, Empty)(vector);                             \
 }                                      \
 \
-static uint32_t VECTOR_DEQUE_METHOD(NAME, Size)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) { \
+static inline uint32_t VECTOR_DEQUE_METHOD(NAME, Size)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) { \
     return vector != NULL ? vector->size : 0;                       \
 }                                      \
 \
-static void VECTOR_DEQUE_METHOD(NAME, Clear)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {   \
+static inline void VECTOR_DEQUE_METHOD(NAME, Clear)(VECTOR_DEQUE_TYPEDEF(NAME) *vector) {   \
     if (vector != NULL) {                               \
     for (uint32_t i = vector->capacity - 1; i >= vector->head; i--) {   \
         vector->items[i] = (TYPE) {0};               \
@@ -111,7 +111,7 @@ static void VECTOR_DEQUE_METHOD(NAME, Clear)(VECTOR_DEQUE_TYPEDEF(NAME) *vector)
     }                                               \
 }                                                   \
 \
-static bool VECTOR_DEQUE_METHOD(NAME, Contains)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) { \
+static inline bool VECTOR_DEQUE_METHOD(NAME, Contains)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) { \
     if (vector == NULL) return false;                          \
     for (uint32_t i = vector->capacity - 1; i >= vector->head; i--) {   \
         if (COMPARE_FUN(vector->items[i], value) == 0) {        \
@@ -126,7 +126,7 @@ static bool VECTOR_DEQUE_METHOD(NAME, Contains)(VECTOR_DEQUE_TYPEDEF(NAME) *vect
     return false;                                               \
 }                                                               \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirstOccur)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) {   \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirstOccur)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) {   \
     if (vector == NULL) return (TYPE) {0};                                       \
     for (uint32_t i = vector->capacity - 1; i >= vector->head; i--) {   \
         TYPE arrayValue = vector->items[i];                             \
@@ -148,7 +148,7 @@ static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveFirstOccur)(VECTOR_DEQUE_TYPEDEF(NAM
     return (TYPE) {0};                                                  \
 }       \
 \
-static TYPE VECTOR_DEQUE_METHOD(NAME, RemoveLastOccur)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) {    \
+static inline TYPE VECTOR_DEQUE_METHOD(NAME, RemoveLastOccur)(VECTOR_DEQUE_TYPEDEF(NAME) *vector, TYPE value) {    \
     if (vector == NULL) return (TYPE) {0};                              \
     for (uint32_t i = 0; i <= vector->tail; i++) {                      \
         TYPE arrayValue = vector->items[i];                             \
