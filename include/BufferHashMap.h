@@ -113,19 +113,19 @@ static inline HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_
     return map;                                                                                     \
 }                                                                                                   \
 \
-static inline inline uint32_t HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapSize)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
+static inline uint32_t HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapSize)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
     return map != NULL ? map->size : 0; \
 }   \
 \
-static inline inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
+static inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {  \
     return map != NULL ? map->size == 0 : true; \
 }   \
 \
-static inline inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {   \
+static inline bool HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) {   \
     return !HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapEmpty)(map);        \
 }   \
 \
-static inline inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapContains)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {                                                                                                         \
+static inline bool HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapContains)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) {                                                                                                         \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key); \
     return !entry->isEmptySlot;     \
 }  \
@@ -181,7 +181,7 @@ static inline void HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapClear)(HASH_MAP_TYPE
     }                                                   \
 }                                                       \
 \
-static inline inline HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapIter)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) { \
+static inline HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapIter)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map) { \
     HASH_MAP_ITERATOR_TYPEDEF(KEY_NAME, VALUE_NAME) iterator = {.map = map, .index = 0};    \
     return iterator;    \
 }                       \
