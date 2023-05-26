@@ -57,6 +57,23 @@ static MunitResult testMapGetElements(const MunitParameter params[], void *map) 
     return MUNIT_OK;
 }
 
+static MunitResult testMapContainsElements(const MunitParameter params[], void *map) {
+    (HashMap) map;
+    hashMapPut(map, "key1", "value1");
+    hashMapPut(map, "key2", "value2");
+    hashMapPut(map, "key3", "value3");
+    hashMapPut(map, "key4", NULL);
+
+    assert_false(isHashMapContainsKey(map, "err"));
+    assert_true(isHashMapContainsKey(map, "key1"));
+    assert_true(isHashMapContainsKey(map, "key2"));
+    assert_true(isHashMapContainsKey(map, "key3"));
+    assert_true(isHashMapContainsKey(map, "key4"));
+
+    return MUNIT_OK;
+}
+
+
 static MunitResult testMapRemoveElements(const MunitParameter params[], void *map) {
     (HashMap) map;
     hashMapPut(map, "val1", (MapValueType) 22);
@@ -167,54 +184,15 @@ static void mapTearDown(void *map) {
 
 
 static MunitTest hashMapTests[] = {
-        {
-                .name =  "Test hashMapPut() - should correctly hold elements",
-                .test = testMapPutElements,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test hashMapGet() - should correctly return elements",
-                .test = testMapGetElements,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test hashMapRemove() - should correctly remove elements",
-                .test = testMapRemoveElements,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test getHashMapIterator() - should correctly iterate elements",
-                .test = testMapIterator,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test getHashMapSize() - should return correct map size",
-                .test = testMapSize,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test hashMapAddAll() - should correctly copy elements from map to map",
-                .test = testMapAddAll,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test testHashMapClear() - should clear map",
-                .test = testMapClear,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
-        {
-                .name =  "Test hashMap Load - should collect and remove a lot of elements",
-                .test = testMapLoad,
-                .setup = mapSetup,
-                .tear_down = mapTearDown
-        },
+        {.name =  "Test hashMapPut() - should correctly hold elements", .test = testMapPutElements, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test hashMapGet() - should correctly return elements", .test = testMapGetElements, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test isHashMapContainsKey() - should correctly check containing elements", .test = testMapContainsElements, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test hashMapRemove() - should correctly remove elements", .test = testMapRemoveElements, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test getHashMapIterator() - should correctly iterate elements", .test = testMapIterator, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test getHashMapSize() - should return correct map size", .test = testMapSize, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test hashMapAddAll() - should correctly copy elements from map to map", .test = testMapAddAll, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test testHashMapClear() - should clear map", .test = testMapClear, .setup = mapSetup, .tear_down = mapTearDown},
+        {.name =  "Test hashMap Load - should collect and remove a lot of elements", .test = testMapLoad, .setup = mapSetup, .tear_down = mapTearDown},
         END_OF_TESTS
 };
 

@@ -118,7 +118,8 @@ bool isHashMapNotEmpty(HashMap hashMap) {
 }
 
 bool isHashMapContainsKey(HashMap hashMap, const char *key) {
-    return hashMapGet(hashMap, key) != (MapValueType) NULL;
+    Entry *entry = findEntry(hashMap->entries, hashMap->capacity, key);
+    return entry->key != NULL;
 }
 
 HashMapIterator getHashMapIterator(HashMap hashMap) {
