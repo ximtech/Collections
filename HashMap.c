@@ -47,7 +47,7 @@ bool hashMapPut(HashMap hashMap, const char *key, MapValueType value) {
 
 MapValueType hashMapGet(HashMap hashMap, const char *key) {
     MapEntry *entry = hashMapGetEntry(hashMap, key);
-    return (entry->key != NULL) ? entry->value : (MapValueType) NULL;
+    return entry != NULL ? entry->value : (MapValueType) NULL;
 }
 
 MapValueType hashMapGetOrDefault(HashMap hashMap, const char *key, MapValueType defaultValue) {
@@ -57,9 +57,10 @@ MapValueType hashMapGetOrDefault(HashMap hashMap, const char *key, MapValueType 
 
 MapEntry *hashMapGetEntry(HashMap hashMap, const char *key) {
     if (isHashMapNotEmpty(hashMap) && key != NULL) {
-        return findEntry(hashMap->entries, hashMap->capacity, key);
+        MapEntry *entry = findEntry(hashMap->entries, hashMap->capacity, key);
+        return entry->key != NULL ? entry : NULL;
     }
-    return (MapValueType) NULL;
+    return NULL;
 }
 
 MapValueType hashMapRemove(HashMap hashMap, const char *key) {
