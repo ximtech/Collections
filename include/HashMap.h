@@ -10,6 +10,19 @@
 typedef struct HashMap *HashMap;
 typedef void* MapValueType; // Map can keep any type, change for specific
 
+typedef struct MapEntry {
+    char *key;  // key is NULL if this slot empty
+    MapValueType value;
+    bool isDeleted;
+} MapEntry;
+
+struct HashMap {
+    MapEntry *entries;
+    uint32_t size;
+    uint32_t capacity;
+    uint32_t deletedItemsCount;
+};
+
 typedef struct HashMapIterator {
     const char *key;
     MapValueType value;
@@ -20,9 +33,14 @@ typedef struct HashMapIterator {
 HashMap getHashMapInstance(uint32_t capacity);
 
 bool hashMapPut(HashMap hashMap, const char *key, MapValueType value);
+
 MapValueType hashMapGet(HashMap hashMap, const char *key);
 MapValueType hashMapGetOrDefault(HashMap hashMap, const char *key, MapValueType defaultValue);
+MapEntry *hashMapGetEntry(HashMap hashMap, const char *key);
+
 MapValueType hashMapRemove(HashMap hashMap, const char *key);
+MapValueType hashMapRemoveEntry(HashMap hashMap, MapEntry *entry);
+
 void hashMapAddAll(HashMap from, HashMap to);
 void hashMapClear(HashMap hashMap);
 
