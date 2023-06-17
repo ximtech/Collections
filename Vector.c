@@ -29,36 +29,42 @@ Vector getVectorInstance(uint32_t capacity) {
     return vector;
 }
 
-void vectorAdd(Vector vector, VectorValueType item) {
+bool vectorAdd(Vector vector, VectorValueType item) {
     if (vector != NULL) {
         if (vector->size >= vector->capacity) {
-            if (!doubleVectorCapacity(vector)) return;
+            if (!doubleVectorCapacity(vector)) return false;
         }
         vector->itemArray[vector->size++] = item;
+        return true;
     }
+    return false;
 }
 
 VectorValueType vectorGet(Vector vector, uint32_t index) {
     return (vector != NULL && index < vector->size) ? vector->itemArray[index] : (VectorValueType) NULL;
 }
 
-void vectorPut(Vector vector, uint32_t index, VectorValueType item) {
+bool vectorPut(Vector vector, uint32_t index, VectorValueType item) {
     if (vector != NULL && index < vector->size) {
         vector->itemArray[index] = item;
+        return true;
     }
+    return false;
 }
 
-void vectorAddAt(Vector vector, uint32_t index, VectorValueType item) {
+bool vectorAddAt(Vector vector, uint32_t index, VectorValueType item) {
     if (vector != NULL && index < vector->size) {
         if (vector->size >= vector->capacity) {
-            if (!doubleVectorCapacity(vector)) return;
+            if (!doubleVectorCapacity(vector)) return false;
         }
         for (uint32_t i = vector->size; i > index; i--) {
             vector->itemArray[i] = vector->itemArray[i - 1];
         }
         vector->itemArray[index] = item;
         vector->size++;
+        return true;
     }
+    return false;
 }
 
 VectorValueType vectorRemoveAt(Vector vector, uint32_t index) {

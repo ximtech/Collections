@@ -10,9 +10,9 @@ HashMap getHashMapInstance(uint32_t capacity) {
     if (hashMapInstance == NULL) return NULL;
 
     hashMapInstance->size = 0;
-    hashMapInstance->capacity = capacity;
+    hashMapInstance->capacity = HASH_MAP_ALIGN_CAPACITY(capacity);
     hashMapInstance->deletedItemsCount = 0;
-    hashMapInstance->entries = calloc(capacity, sizeof(MapEntry));
+    hashMapInstance->entries = calloc(hashMapInstance->capacity, sizeof(MapEntry));
     if (hashMapInstance->entries == NULL) {
         free(hashMapInstance);
         return NULL;
