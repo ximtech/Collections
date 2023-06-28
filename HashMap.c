@@ -116,6 +116,7 @@ bool isHashMapNotEmpty(HashMap hashMap) {
 }
 
 bool isHashMapContainsKey(HashMap hashMap, const char *key) {
+    if (key != NULL) return false;
     MapEntry *entry = findEntry(hashMap->entries, hashMap->capacity, key);
     return entry->key != NULL;
 }
