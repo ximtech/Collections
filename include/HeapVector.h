@@ -363,7 +363,7 @@ static inline HEAP_VECTOR_TYPEDEF(NAME) * HEAP_VECTOR_METHOD(NAME, Disjunction)(
     return NULL;                                                                    \
 }                                                                                   \
 \
-void HEAP_VECTOR_METHOD(NAME, Delete)(HEAP_VECTOR_TYPEDEF(NAME) *vector) {      \
+static inline void HEAP_VECTOR_METHOD(NAME, Delete)(HEAP_VECTOR_TYPEDEF(NAME) *vector) {      \
     if (vector != NULL) {               \
         free(vector->items);            \
         free(vector);                   \
