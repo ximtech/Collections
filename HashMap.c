@@ -182,7 +182,8 @@ static MapEntry *findEntry(MapEntry *entries, uint32_t capacity, const char *key
 
 static uint32_t hashCode(const char *key) {  // Returns a hashCode code for the provided string.
     uint32_t hash = 2166136261u;
-    for (uint32_t i = 0; i < strlen(key); i++) {
+    uint32_t keyLength = strlen(key);
+    for (uint32_t i = 0; i < keyLength; i++) {
         hash ^= (uint8_t) key[i];
         hash *= 16777619;
     }
