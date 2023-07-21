@@ -25,9 +25,9 @@ static MunitResult testBuffSetCreation(const MunitParameter params[], void *data
     // alignment test
     assertIntSet(NEW_HASH_SET(int, 4), 0, 8);
     assertIntSet(NEW_HASH_SET(int, 1), 0, 2);
-    assertIntSet(NEW_HASH_SET(int, 3), 0, 6);
-    assertIntSet(NEW_HASH_SET(int, 11), 0, 22);
-    assertIntSet(NEW_HASH_SET(int, 33), 0, 66);
+    assertIntSet(NEW_HASH_SET(int, 3), 0, 8);
+    assertIntSet(NEW_HASH_SET(int, 11), 0, 32);
+    assertIntSet(NEW_HASH_SET(int, 30), 0, 64);
 
     assertIntSet(NEW_HASH_SET_4(int), 0, 8);
     assertIntSet(NEW_HASH_SET_8(int), 0, 16);
@@ -41,20 +41,20 @@ static MunitResult testBuffSetCreation(const MunitParameter params[], void *data
 
     assertIntSet(HASH_SET_OF(int, { 1 }), 1, 2);
     assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }), 2, 4);
-    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }), 3, 6);
-    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }, { 7 }, { 8 }, { 9 }, { 10 }, { 11 }, { 12 }, { 13 }, { 14 }, { 15 }, { 16 }, { 17 }, { 18 }, { 19 }, { 20 }), 20, 40);
+    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }), 3, 8);
+    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }, { 7 }, { 8 }, { 9 }, { 10 }, { 11 }, { 12 }, { 13 }, { 14 }, { 15 }, { 16 }, { 17 }, { 18 }, { 19 }, { 20 }), 20, 64);
 
     strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
     assert_uint32(strSet->size, ==, 3);
-    assert_uint32(strSet->capacity, ==, 6);
+    assert_uint32(strSet->capacity, ==, 8);
 
     cStrHashSet *cStrSet = NEW_HASH_SET_OF(6, cStr,{ "v1" }, { "v2" }, { "v3" });
     assert_uint32(cStrSet->size, ==, 3);
-    assert_uint32(cStrSet->capacity, ==, 12);
+    assert_uint32(cStrSet->capacity, ==, 16);
 
     floatHashSet *flSet = NEW_HASH_SET_OF(15, float, { 1.1 }, { 2.2 }, { 3.3 });
     assert_uint32(flSet->size, ==, 3);
-    assert_uint32(flSet->capacity, ==, 30);
+    assert_uint32(flSet->capacity, ==, 32);
 
     userHashSet *usrSet = HASH_SET_OF(user, { "first", 23 }, { "second", 18 });
     assert_uint32(usrSet->size, ==, 2);

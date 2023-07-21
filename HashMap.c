@@ -1,6 +1,7 @@
 #include "HashMap.h"
 
 static MapEntry *findEntry(MapEntry *entries, uint32_t capacity, const char *key);
+static uint32_t nextPowerOfTwo(uint32_t capacity);
 static uint32_t hashCode(const char *key);
 static bool adjustHashMapCapacity(HashMap hashMap, uint32_t capacity);
 
@@ -10,7 +11,7 @@ HashMap getHashMapInstance(uint32_t capacity) {
     if (hashMapInstance == NULL) return NULL;
 
     hashMapInstance->size = 0;
-    hashMapInstance->capacity = HASH_MAP_ALIGN_CAPACITY(capacity);
+    hashMapInstance->capacity = nextPowerOfTwo(capacity);
     hashMapInstance->deletedItemsCount = 0;
     hashMapInstance->entries = calloc(hashMapInstance->capacity, sizeof(MapEntry));
     if (hashMapInstance->entries == NULL) {
@@ -160,7 +161,7 @@ void initSingletonHashMap(HashMap *hashMap, uint32_t capacity) {
 
 static MapEntry *findEntry(MapEntry *entries, uint32_t capacity, const char *key) {
     uint32_t hash = hashCode(key);
-    uint32_t index = hash % capacity;
+    uint32_t index = hash & (capacity - 1);
     MapEntry *tombstone = NULL;
 
     while (true) {
@@ -176,8 +177,17 @@ static MapEntry *findEntry(MapEntry *entries, uint32_t capacity, const char *key
         } else if (strcmp(key, entry->key) == 0) {   // If bucket has the same key, we’re done
             return entry;   // We found the key.
         }
-        index = (index + 1) % capacity; // If we go past the end of the array, that second modulo operator wraps us back around to the beginning.
+        index = (index + 1) & (capacity - 1); // If we go past the end of the array, that second modulo operator wraps us back around to the beginning.
     }
+}
+
+static uint32_t nextPowerOfTwo(uint32_t capacity) {
+    capacity--;
+    uint32_t i = 0;
+    for (; capacity > 0; capacity >>= 1) {
+        i++;
+    }
+    return 1 << i;
 }
 
 static uint32_t hashCode(const char *key) {  // Returns a hashCode code for the provided string.
@@ -191,7 +201,7 @@ static uint32_t hashCode(const char *key) {  // Returns a hashCode code for the 
 }
 
 static bool adjustHashMapCapacity(HashMap hashMap, uint32_t capacity) {
-    MapEntry *newEntries = calloc(capacity, sizeof(MapEntry));
+    MapEntry *newEntries = calloc(capacity, sizeof(struct MapEntry));
     if (newEntries == NULL) return false;
 
     hashMap->size = 0;  // Don’t copy the tombstones over. Recalculate the count since it may change during a resize

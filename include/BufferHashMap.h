@@ -6,7 +6,7 @@
 
 #define HASH_MAP_EXPAND_FACTOR 2
 #define HASH_MAP_BUFFER_EXPAND_FACTOR(CAPACITY) ((CAPACITY) * HASH_MAP_EXPAND_FACTOR)
-#define HASH_MAP_ALIGN_CAPACITY(CAPACITY) ((HASH_MAP_BUFFER_EXPAND_FACTOR(CAPACITY) + 1) & ~1)
+#define HASH_MAP_ALIGN_CAPACITY(CAPACITY) (NEXT_POW_OF_2(HASH_MAP_BUFFER_EXPAND_FACTOR(CAPACITY)))
 
 #define HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) KEY_NAME ## _ ## VALUE_NAME ## MapEntry
 #define HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) KEY_NAME ## _ ## VALUE_NAME ## Map
@@ -62,7 +62,7 @@ static inline HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(new, KEY_
 \
 static inline HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
     uint32_t hash = HASH_FUN(key);                              \
-    uint32_t index = hash % map->capacity;                      \
+    uint32_t index = hash & (map->capacity - 1);                \
     HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *tombstone = NULL;     \
                                                                 \
     while (true) {                                              \
@@ -78,7 +78,7 @@ static inline HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) * HASH_MAP_METHOD(fin
         } else if (COMPARE_FUN(key, entry->key) == 0) {         \
             return entry;                                       \
         }                                                       \
-        index = (index + 1) % map->capacity;                    \
+        index = (index + 1) & (map->capacity - 1);              \
     }                                                           \
 }                                                               \
 \

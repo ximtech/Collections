@@ -11,6 +11,15 @@
 
 #define VAR_ARGS_LENGTH(TYPE, ...)  (sizeof((TYPE []){__VA_ARGS__}) / sizeof(TYPE))
 
+#define NEXT_POW_OF_TWO_0(val) ((val) - 1)
+#define NEXT_POW_OF_TWO_1(val) (NEXT_POW_OF_TWO_0(val) | NEXT_POW_OF_TWO_0(val) >> 1)
+#define NEXT_POW_OF_TWO_2(val) (NEXT_POW_OF_TWO_1(val) | NEXT_POW_OF_TWO_1(val) >> 2)
+#define NEXT_POW_OF_TWO_3(val) (NEXT_POW_OF_TWO_2(val) | NEXT_POW_OF_TWO_2(val) >> 4)
+#define NEXT_POW_OF_TWO_4(val) (NEXT_POW_OF_TWO_3(val) | NEXT_POW_OF_TWO_3(val) >> 8)
+#define NEXT_POW_OF_TWO_5(val) (NEXT_POW_OF_TWO_4(val) | NEXT_POW_OF_TWO_4(val) >> 16)
+
+#define NEXT_POW_OF_2(val) (NEXT_POW_OF_TWO_5(val) + 1)
+
 #define COMPARATOR_FOR_TYPE(TYPE) TYPE ## Comparator
 #define HASH_CODE_FOR_TYPE(TYPE)  TYPE ## HashCode
 

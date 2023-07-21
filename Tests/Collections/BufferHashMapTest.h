@@ -23,9 +23,9 @@ static MunitResult testBuffMapCreation(const MunitParameter params[], void *data
     // alignment test
     assertIntMap(NEW_HASH_MAP(int, int, 4), 0, 8);
     assertIntMap(NEW_HASH_MAP(int, int, 1), 0, 2);
-    assertIntMap(NEW_HASH_MAP(int, int, 3), 0, 6);
-    assertIntMap(NEW_HASH_MAP(int, int, 11), 0, 22);
-    assertIntMap(NEW_HASH_MAP(int, int, 33), 0, 66);
+    assertIntMap(NEW_HASH_MAP(int, int, 3), 0, 8);
+    assertIntMap(NEW_HASH_MAP(int, int, 11), 0, 32);
+    assertIntMap(NEW_HASH_MAP(int, int, 30), 0, 64);
 
     assertIntMap(NEW_HASH_MAP_4(int, int), 0, 8);
     assertIntMap(NEW_HASH_MAP_8(int, int), 0, 16);
@@ -39,24 +39,24 @@ static MunitResult testBuffMapCreation(const MunitParameter params[], void *data
 
     assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }), 1, 2);
     assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }), 2, 4);
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }), 3, 6);
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 }, { 10, 10 }, { 11, 11 },{ 12, 12 }), 12, 24);
+    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }), 3, 8);
+    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 }, { 10, 10 }, { 11, 11 },{ 12, 12 }), 12, 32);
 
     str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
     assert_uint32(strMap->size, ==, 3);
-    assert_uint32(strMap->capacity, ==, 6);
+    assert_uint32(strMap->capacity, ==, 8);
 
     cStr_cStrMap *cStrMap = NEW_HASH_MAP_OF(6, cStr, cStr, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
     assert_uint32(cStrMap->size, ==, 3);
-    assert_uint32(cStrMap->capacity, ==, 12);
+    assert_uint32(cStrMap->capacity, ==, 16);
 
     i8_floatMap *i8Map = NEW_HASH_MAP_OF(15, i8, float, { 1, 1.1 }, { 2, 2.2 }, { 3, 3.3 });
     assert_uint32(i8Map->size, ==, 3);
-    assert_uint32(i8Map->capacity, ==, 30);
+    assert_uint32(i8Map->capacity, ==, 32);
 
     user_intMap *usrMap = HASH_MAP_OF(user, int, {{ "first", 23 }, 123 }, {{ "second", 18 }, 456 });
     assert_uint32(usrMap->size, ==, 2);
-    assert_uint32(usrMap->capacity, ==, 6);
+    assert_uint32(usrMap->capacity, ==, 8);
     return MUNIT_OK;
 }
 

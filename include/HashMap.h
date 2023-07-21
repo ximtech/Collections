@@ -9,12 +9,6 @@
 #define HASH_MAP_LOAD_FACTOR 0.75
 #endif
 
-#ifndef HASH_MAP_ALIGN_CAPACITY
-#define HASH_MAP_EXPAND_FACTOR 2
-#define HASH_MAP_BUFFER_EXPAND_FACTOR(CAPACITY) ((CAPACITY) * HASH_MAP_EXPAND_FACTOR)
-#define HASH_MAP_ALIGN_CAPACITY(CAPACITY) ((HASH_MAP_BUFFER_EXPAND_FACTOR(CAPACITY) + 1) & ~1)
-#endif
-
 typedef struct HashMap *HashMap;
 typedef void* MapValueType; // Map can keep any type, change for specific
 

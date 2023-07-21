@@ -6,7 +6,7 @@
 
 #define HASH_SET_EXPAND_FACTOR 2
 #define HASH_SET_BUFFER_EXPAND_FACTOR(CAPACITY) ((CAPACITY) * HASH_SET_EXPAND_FACTOR)
-#define HASH_SET_ALIGN_CAPACITY(CAPACITY) ((HASH_SET_BUFFER_EXPAND_FACTOR(CAPACITY) + 1) & ~1)
+#define HASH_SET_ALIGN_CAPACITY(CAPACITY) (NEXT_POW_OF_2(HASH_SET_BUFFER_EXPAND_FACTOR(CAPACITY)))
 
 #define HASH_SET_ENTRY_TYPEDEF(NAME) NAME ##HashSetEntry
 #define HASH_SET_TYPEDEF(NAME) NAME ##HashSet
@@ -59,7 +59,7 @@ static inline HASH_SET_TYPEDEF(NAME) * HASH_SET_METHOD(new, NAME, BufferSet)(HAS
                                                 \
 static inline HASH_SET_ENTRY_TYPEDEF(NAME) * HASH_SET_METHOD(find, NAME, SetEntry)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
     uint32_t hash = HASH_FUN(value);                    \
-    uint32_t index = hash % set->capacity;              \
+    uint32_t index = hash & (set->capacity - 1);        \
     HASH_SET_ENTRY_TYPEDEF(NAME) *tombstone = NULL;     \
                                                         \
     while (true) {                                      \
@@ -75,7 +75,7 @@ static inline HASH_SET_ENTRY_TYPEDEF(NAME) * HASH_SET_METHOD(find, NAME, SetEntr
         } else if (COMPARE_FUN(value, entry->value) == 0) {     \
             return entry;                                       \
         }                                                       \
-        index = (index + 1) % set->capacity;                    \
+        index = (index + 1) & (set->capacity - 1);              \
     }                                                           \
 }                                                               \
 \
