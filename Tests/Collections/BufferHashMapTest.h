@@ -37,12 +37,12 @@ static MunitResult testBuffMapCreation(const MunitParameter params[], void *data
     assertIntMap(NEW_HASH_MAP_512(int, int), 0, 1024);
     assertIntMap(NEW_HASH_MAP_1024(int, int), 0, 2048);
 
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }), 1, 2);
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }), 2, 4);
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }), 3, 8);
-    assertIntMap(HASH_MAP_OF(int, int, { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 }, { 10, 10 }, { 11, 11 },{ 12, 12 }), 12, 32);
+    assertIntMap(HASH_MAP_OF(int, int,  1, 1), 1, 2);
+    assertIntMap(HASH_MAP_OF(int, int, 1, 1, 2, 2), 2, 4);
+    assertIntMap(HASH_MAP_OF(int, int, 1, 1, 2, 2, 3, 3), 3, 8);
+    assertIntMap(HASH_MAP_OF(int, int, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11, 11,12, 12), 12, 32);
 
-    str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+    str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
     assert_uint32(strMap->size, ==, 3);
     assert_uint32(strMap->capacity, ==, 8);
 
@@ -54,9 +54,16 @@ static MunitResult testBuffMapCreation(const MunitParameter params[], void *data
     assert_uint32(i8Map->size, ==, 3);
     assert_uint32(i8Map->capacity, ==, 32);
 
-    user_intMap *usrMap = HASH_MAP_OF(user, int, {{ "first", 23 }, 123 }, {{ "second", 18 }, 456 });
+    user_intMap *usrMap = NEW_HASH_MAP_OF(2, user, int, {{ "first", 23 }, 123 }, {{ "second", 18 }, 456 });
     assert_uint32(usrMap->size, ==, 2);
-    assert_uint32(usrMap->capacity, ==, 8);
+    assert_uint32(usrMap->capacity, ==, 4);
+
+    User u1 = { "first", 23 };
+    User u2 = { "second", 18 };
+    user_intMap *usrMap_2 = HASH_MAP_OF(user, int, u1, 123 , u2, 456 );
+    assert_uint32(usrMap_2->size, ==, 2);
+    assert_uint32(usrMap_2->capacity, ==, 4);
+
     return MUNIT_OK;
 }
 
@@ -90,7 +97,7 @@ static MunitResult testBuffMapGet(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffMapRemove(const MunitParameter params[], void *data) {
-    str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+    str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
     assert_uint32(strMap->size, ==, 3);
     str value = str_strMapRemove(strMap, "k2");
     assert_uint32(strMap->size, ==, 2);
@@ -99,7 +106,7 @@ static MunitResult testBuffMapRemove(const MunitParameter params[], void *data) 
 }
 
 static MunitResult testBuffMapAddAll(const MunitParameter params[], void *data) {
-    str_strMap *strMap1 = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+    str_strMap *strMap1 = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
     str_strMap *strMap2 = NEW_HASH_MAP_OF(12, str, str, {"k4", "v4"}, {"k5", "v5"});
     str_strMapAddAll(strMap1, strMap2);
     assert_uint32(strMap2->size, ==, 5);
@@ -112,7 +119,7 @@ static MunitResult testBuffMapAddAll(const MunitParameter params[], void *data) 
 }
 
 static MunitResult testBuffMapClear(const MunitParameter params[], void *data) {
-    str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+    str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
     assert_uint32(str_strMapSize(strMap), ==, 3);
     str_strMapClear(strMap);
     assert_uint32(str_strMapSize(strMap), ==, 0);
@@ -128,7 +135,7 @@ static MunitResult testBuffMapSize(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffMapEmpty(const MunitParameter params[], void *data) {
-    int_charMap *charMap = HASH_MAP_OF(int, char, { 1, 'a' }, { 2, 'b' }, { 3, 'c' });
+    int_charMap *charMap = HASH_MAP_OF(int, char, 1, 'a', 2, 'b', 3, 'c' );
     assert_false(is_int_charMapEmpty(charMap));
     assert_true(is_int_charMapNotEmpty(charMap));
 
@@ -139,14 +146,14 @@ static MunitResult testBuffMapEmpty(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffMapContains(const MunitParameter params[], void *data) {
-    str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+    str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
     assert_true(str_strMapContains(strMap, "k1"));
     assert_false(str_strMapContains(strMap, "k4"));
     return MUNIT_OK;
 }
 
 static MunitResult testBuffMapIterator(const MunitParameter params[], void *data) {
-    int_charMap *charMap = HASH_MAP_OF(int, char, { 1, 'a' }, { 2, 'b' }, { 3, 'c' });
+    int_charMap *charMap = HASH_MAP_OF(int, char, 1, 'a', 2, 'b', 3, 'c');
     int_charMapIterator iter = int_charMapIter(charMap);
     while (int_charMapHasNext(&iter)) {
         assert_true(int_charMapContains(charMap, iter.key));

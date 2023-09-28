@@ -422,11 +422,14 @@ int_intMap *intMap1 = NEW_HASH_MAP(int, int, 4); // empty Map with max length of
 str_strMap *srtMap2 = NEW_HASH_MAP_8(str, str); // shorter version from predefined macro
 str_strMap *srtMap3 = NEW_HASH_MAP_128(str, str); // bigger, check available defines in `BufferHashMap.h'
 
-str_strMap *strMap5 = HASH_MAP_OF(str, str, {"k1", "v1"}, {"k2", "v2"}, {"k3", "v3"}); // auto size resolving for 3 pairs
+str_strMap *strMap5 = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3"); // auto size resolving for 3 pairs
 i8_floatMap *i8Map = NEW_HASH_MAP_OF(5, i8, float, {1, 1.1}, {2, 2.2}, {3, 3.3});  // map with capacity for 5 key/value pairs(will be aligned to (5 + 1) * 2) and values
 cStr_cStrMap *strMap4 = NEW_HASH_MAP_OF(3, cStr, cStr, {"k1", "v1"}, {"k2", "v2"}, {"k3", "v3"}); // key/value types with aliases
 
-user_intMap *usrMap = HASH_MAP_OF(user, int, {{ "first", 23 }, 123 }, {{ "second", 18 }, 456 });   // custom type as a key and `int` as value
+User user_1 = { "first", 23 };
+User user_2 = { "second", 18 };
+user_intMap *usrMap = HASH_MAP_OF(user, int, user_1, 123 , user_2, 456 );   // custom type as a key and `int` as value
+user_intMap *usrMap2 = NEW_HASH_MAP_OF(2, user, int, {{ "first", 23 }, 123 }, {{ "second", 18 }, 456 });    // inline user creation as a key
 ```
 
 ### Add elements
@@ -454,7 +457,7 @@ assert(i8_floatMapGetOrDefault(i8Map, 4, -1.0) == -1.0); // returns provided def
 
 ### Remove element
 ```c
-str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
 str value = str_strMapRemove(strMap, "k2");
 assert(value == "v2");
 ```
@@ -463,14 +466,14 @@ assert(value == "v2");
 
 **NOTE:** make sure that destination map have enough capacity to store all values
 ```c
-str_strMap *strMap1 = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+str_strMap *strMap1 = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3" );
 str_strMap *strMap2 = NEW_HASH_MAP_OF(12, str, str, {"k4", "v4"}, {"k5", "v5"});
 str_strMapAddAll(strMap1, strMap2); // strMap2 -> [k2]:[v2], [k5]:[v5], [k1]:[v1], [k3]:[v3], [k4]:[v4]
 ```
 
 ### Remove all elements
 ```c
-str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
 assert(str_strMapSize(strMap) == 3);
 str_strMapClear(strMap);
 assert(str_strMapSize(strMap) == 0);
@@ -484,7 +487,7 @@ printf("Map size: [%d]\n", int_charMapSize(charMap));   // Map size: [3]
 
 ### Check that Map is empty or not
 ```c
-int_charMap *charMap = HASH_MAP_OF(int, char, { 1, 'a' }, { 2, 'b' }, { 3, 'c' });
+int_charMap *charMap = HASH_MAP_OF(int, char, 1, 'a', 2, 'b', 3, 'c');
 assert(is_int_charMapEmpty(charMap) == false);
 assert(is_int_charMapNotEmpty(charMap) == true);
 
@@ -495,14 +498,14 @@ assert(is_int_charMapNotEmpty(charMap) == false);
 
 ### Check that Map contains key
 ```c
-str_strMap *strMap = HASH_MAP_OF(str, str, { "k1", "v1" }, { "k2", "v2" }, { "k3", "v3" });
+str_strMap *strMap = HASH_MAP_OF(str, str, "k1", "v1", "k2", "v2", "k3", "v3");
 assert(str_strMapContains(strMap, "k1") == true);
 assert(str_strMapContains(strMap, "k4") == false);
 ```
 
 ### Iterate Map keys and values
 ```c
-int_charMap *charMap = HASH_MAP_OF(int, char, { 1, 'a' }, { 2, 'b' }, { 3, 'c' });
+int_charMap *charMap = HASH_MAP_OF(int, char, 1, 'a', 2, 'b', 3, 'c');
 int_charMapIterator iter = int_charMapIter(charMap);
 while (int_charMapHasNext(&iter)) {
   printf("Key: [%d], Value: [%c]\n", iter.key, iter.value);
@@ -608,10 +611,10 @@ strHashSet *strSet = NEW_HASH_SET(str, 4); // empty Set with max length of 4
 intHashSet *intSet = NEW_HASH_SET_8(int); // shorter version from predefined macro
 i8HashSet *i8Set = NEW_HASH_SET_128(i8); // bigger, check available defines in `BufferHashSet.h'
 
-floatHashSet *floatSet = HASH_SET_OF(float, {1.1}, {2.2}, {3.3}); // auto size resolving for 3 elements
-strHashSet *strSet1 = HASH_SET_OF(str, {"one"}, {"two"}, {"three"}, {"four"}, {"one"}, {"one"});   // duplicates will be removed
+floatHashSet *floatSet = HASH_SET_OF(float, 1.1, 2.2, 3.3); // auto size resolving for 3 elements
+strHashSet *strSet1 = HASH_SET_OF(str, "one", "two", "three", "four", "one", "one");   // duplicates will be removed
 strHashSet *strSet2 = NEW_HASH_SET_OF(5, str, {"v1"}, {"v2"}, {"v3"});  // Set with capacity for 5 values. The capacity will be aligned to (5 + 1) * 2 = 12
-userHashSet *userSet = HASH_SET_OF(user, {"name_1", 23}, {"name_2", 13}); // custom type set
+userHashSet *userSet = NEW_HASH_SET_OF(5, user, {"name_1", 23}, {"name_2", 13}); // custom type set
 ```
 
 ### Add elements
@@ -628,7 +631,7 @@ assert(strSetAdd(strSet, "value_5") == false); // `false` when out of capacity
 
 ### Remove element
 ```c
-strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
 assert(strSetRemove(strMap, "k2") == true);
 ```
 
@@ -636,14 +639,14 @@ assert(strSetRemove(strMap, "k2") == true);
 
 **NOTE:** make sure that destination HashSet have enough capacity to store all values
 ```c
-strHashSet *strSet1 = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+strHashSet *strSet1 = HASH_SET_OF(str, "v1", "v2", "v3");
 strHashSet *strSet2 = NEW_HASH_SET_OF(12, str, {"v4"}, {"v5"});
 strSetAddAll(strSet1, strSet2); // strSet2 -> [v2], [v5], [v1], [v3], [v4]
 ```
 
 ### Remove all elements
 ```c
-strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
 assert(strSetSize(strSet) == 3);
 strSetClear(strSet);
 assert(strSetSize(strSet) == 0);
@@ -657,7 +660,7 @@ printf("Set size: [%d]\n", charSetSize(charSet));   // Set size: [3]
 
 ### Check that Set is empty or not
 ```c
-charHashSet *charSet = HASH_SET_OF(char, { 'a' }, { 'b' }, { 'c' });
+charHashSet *charSet = HASH_SET_OF(char, 'a', 'b', 'c' );
 assert(ischarSetEmpty(charSet) == false);
 assert(ischarSetNotEmpty(charSet) == true);
 charSetClear(charSet);
@@ -667,21 +670,21 @@ assert(ischarSetNotEmpty(charSet) == false);
 
 ### Check that Set contains value
 ```c
-strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
 assert(strSetContains(strSet, "v1") == true);
 assert(strSetContains(strSet, "v4") == false);
 ```
 
 ### Check that Set contains all values from other Set
 ```c
-strHashSet *strSet1 = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
-strHashSet *strSet2 = HASH_SET_OF(str, { "v1" }, { "v3" });
+strHashSet *strSet1 = HASH_SET_OF(str, "v1", "v2", "v3");
+strHashSet *strSet2 = HASH_SET_OF(str, "v1", "v3");
 assert(strSetContainsAll(strSet1, strSet2) == true);
 ```
 
 ### Iterate Set values
 ```c
-charHashSet *charSet = HASH_SET_OF(char, { 'a' }, { 'b' }, { 'c' });
+charHashSet *charSet = HASH_SET_OF(char, 'a', 'b', 'c');
 charSetIterator iter = charSetIter(charSet);
 while (charSetHasNext(&iter)) {
   printf("Value: [%c]\n", iter.value);

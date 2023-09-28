@@ -39,12 +39,12 @@ static MunitResult testBuffSetCreation(const MunitParameter params[], void *data
     assertIntSet(NEW_HASH_SET_512(int), 0, 1024);
     assertIntSet(NEW_HASH_SET_1024(int), 0, 2048);
 
-    assertIntSet(HASH_SET_OF(int, { 1 }), 1, 2);
-    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }), 2, 4);
-    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }), 3, 8);
-    assertIntSet(HASH_SET_OF(int, { 1 }, { 2 }, { 3 }, { 4 }, { 5 }, { 6 }, { 7 }, { 8 }, { 9 }, { 10 }, { 11 }, { 12 }, { 13 }, { 14 }, { 15 }, { 16 }, { 17 }, { 18 }, { 19 }, { 20 }), 20, 64);
+    assertIntSet(HASH_SET_OF(int,  1), 1, 2);
+    assertIntSet(HASH_SET_OF(int, 1 , 2), 2, 4);
+    assertIntSet(HASH_SET_OF(int, 1 , 2, 3), 3, 8);
+    assertIntSet(HASH_SET_OF(int, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20), 20, 64);
 
-    strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+    strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
     assert_uint32(strSet->size, ==, 3);
     assert_uint32(strSet->capacity, ==, 8);
 
@@ -56,7 +56,7 @@ static MunitResult testBuffSetCreation(const MunitParameter params[], void *data
     assert_uint32(flSet->size, ==, 3);
     assert_uint32(flSet->capacity, ==, 32);
 
-    userHashSet *usrSet = HASH_SET_OF(user, { "first", 23 }, { "second", 18 });
+    userHashSet *usrSet = NEW_HASH_SET_OF(3, user, { "first", 23 }, { "second", 18 });
     assert_uint32(usrSet->size, ==, 2);
     assert_uint32(usrSet->capacity, ==, 8);
     return MUNIT_OK;
@@ -80,7 +80,7 @@ static MunitResult testBuffSetAdd(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffSetRemove(const MunitParameter params[], void *data) {
-    strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+    strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
     assert_uint32(strSet->size, ==, 3);
     assert_true(strSetRemove(strSet, "v2"));
     assert_uint32(strSet->size, ==, 2);
@@ -90,16 +90,16 @@ static MunitResult testBuffSetRemove(const MunitParameter params[], void *data) 
 }
 
 static MunitResult testBuffSetAddAll(const MunitParameter params[], void *data) {
-    strHashSet *strSet1 = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+    strHashSet *strSet1 = HASH_SET_OF(str, "v1", "v2", "v3");
     strHashSet *strSet2 = NEW_HASH_SET_OF(12, str, {"v4"}, {"v5"});
     strSetAddAll(strSet1, strSet2);
     assert_uint32(strSet2->size, ==, 5);
-    assert_true(strSetContainsAll(strSet2, HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" }, {"v4"}, {"v5"})));
+    assert_true(strSetContainsAll(strSet2, HASH_SET_OF(str, "v1", "v2", "v3", "v4", "v5")));
     return MUNIT_OK;
 }
 
 static MunitResult testBuffSetClear(const MunitParameter params[], void *data) {
-    strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+    strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
     assert_uint32(strSetSize(strSet), ==, 3);
     strSetClear(strSet);
     assert_uint32(strSetSize(strSet), ==, 0);
@@ -107,7 +107,7 @@ static MunitResult testBuffSetClear(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffSetEmpty(const MunitParameter params[], void *data) {
-    charHashSet *charSet = HASH_SET_OF(char, { 'a' }, { 'b' }, { 'c' });
+    charHashSet *charSet = HASH_SET_OF(char, 'a', 'b', 'c');
     assert_false(ischarSetEmpty(charSet));
     assert_true(ischarSetNotEmpty(charSet));
     charSetClear(charSet);
@@ -117,7 +117,7 @@ static MunitResult testBuffSetEmpty(const MunitParameter params[], void *data) {
 }
 
 static MunitResult testBuffSetContains(const MunitParameter params[], void *data) {
-    strHashSet *strSet = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
+    strHashSet *strSet = HASH_SET_OF(str, "v1", "v2", "v3");
     assert_true(strSetContains(strSet, "v1"));
     assert_false(strSetContains(strSet, "v4"));
 
@@ -127,8 +127,8 @@ static MunitResult testBuffSetContains(const MunitParameter params[], void *data
 }
 
 static MunitResult testBuffSetContainsAll(const MunitParameter params[], void *data) {
-    strHashSet *strSet1 = HASH_SET_OF(str, { "v1" }, { "v2" }, { "v3" });
-    strHashSet *strSet2 = HASH_SET_OF(str, { "v1" }, { "v3" });
+    strHashSet *strSet1 = HASH_SET_OF(str, "v1", "v2", "v3");
+    strHashSet *strSet2 = HASH_SET_OF(str, "v1", "v3");
     assert_true(strSetContainsAll(strSet1, strSet2));
 
     strHashSet *strSet3 = NEW_HASH_SET_8(str);
@@ -137,7 +137,7 @@ static MunitResult testBuffSetContainsAll(const MunitParameter params[], void *d
 }
 
 static MunitResult testBuffSetIterator(const MunitParameter params[], void *data) {
-    charHashSet *charSet = HASH_SET_OF(char, { 'a' }, { 'b' }, { 'c' });
+    charHashSet *charSet = HASH_SET_OF(char, 'a', 'b', 'c');
     charSetIterator iter = charSetIter(charSet);
     while (charSetHasNext(&iter)) {
         assert_true(charSetContains(charSet, iter.value));

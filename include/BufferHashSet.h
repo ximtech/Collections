@@ -234,45 +234,64 @@ HASH_SET_METHOD(new, NAME, BufferSetOf)(&(HASH_SET_TYPEDEF(NAME)){0}, \
                                           VAR_ARGS_LENGTH(HASH_SET_ENTRY_TYPEDEF(NAME), __VA_ARGS__))
 
 #define CREATE_HASH_SET_1(NAME, V1) \
-        NEW_HASH_SET_OF(1, NAME, V1)
+        NEW_HASH_SET_OF(1, NAME, {V1})
+
 #define CREATE_HASH_SET_2(NAME, V1, V2) \
-        NEW_HASH_SET_OF(2, NAME, V1, V2)
+        NEW_HASH_SET_OF(2, NAME, {V1}, {V2})
+
 #define CREATE_HASH_SET_3(NAME, V1, V2, V3) \
-        NEW_HASH_SET_OF(3, NAME, V1, V2, V3)
+        NEW_HASH_SET_OF(3, NAME, {V1}, {V2}, {V3})
+
 #define CREATE_HASH_SET_4(NAME, V1, V2, V3, V4) \
-        NEW_HASH_SET_OF(4, NAME, V1, V2, V3, V4)
+        NEW_HASH_SET_OF(4, NAME, {V1}, {V2}, {V3}, {V4})
+
 #define CREATE_HASH_SET_5(NAME, V1, V2, V3, V4, V5) \
-        NEW_HASH_SET_OF(5, NAME, V1, V2, V3, V4, V5)
+        NEW_HASH_SET_OF(5, NAME, {V1}, {V2}, {V3}, {V4}, {V5})
+
 #define CREATE_HASH_SET_6(NAME, V1, V2, V3, V4, V5, V6) \
-        NEW_HASH_SET_OF(6, NAME, V1, V2, V3, V4, V5, V6)
+        NEW_HASH_SET_OF(6, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6})
+
 #define CREATE_HASH_SET_7(NAME, V1, V2, V3, V4, V5, V6, V7) \
-        NEW_HASH_SET_OF(7, NAME, V1, V2, V3, V4, V5, V6, V7)
+        NEW_HASH_SET_OF(7, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7})
+
 #define CREATE_HASH_SET_8(NAME, V1, V2, V3, V4, V5, V6, V7, V8) \
-        NEW_HASH_SET_OF(8, NAME, V1, V2, V3, V4, V5, V6, V7, V8)
+        NEW_HASH_SET_OF(8, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8})
+
 #define CREATE_HASH_SET_9(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9) \
-        NEW_HASH_SET_OF(9, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9)
+        NEW_HASH_SET_OF(9, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9})
+
 #define CREATE_HASH_SET_10(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10) \
-        NEW_HASH_SET_OF(10, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10)
+        NEW_HASH_SET_OF(10, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10})
+
 #define CREATE_HASH_SET_11(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11) \
-        NEW_HASH_SET_OF(11, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11)
+        NEW_HASH_SET_OF(11, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11})
+
 #define CREATE_HASH_SET_12(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12) \
-        NEW_HASH_SET_OF(12, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12)
+        NEW_HASH_SET_OF(12, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12})
+
 #define CREATE_HASH_SET_13(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13) \
-        NEW_HASH_SET_OF(13, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13)
+        NEW_HASH_SET_OF(13, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13})
+
 #define CREATE_HASH_SET_14(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14) \
-        NEW_HASH_SET_OF(14, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14)
+        NEW_HASH_SET_OF(14, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14})
+
 #define CREATE_HASH_SET_15(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15) \
-        NEW_HASH_SET_OF(15, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15)
+        NEW_HASH_SET_OF(15, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15})
+
 #define CREATE_HASH_SET_16(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16) \
-        NEW_HASH_SET_OF(16, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16)
+        NEW_HASH_SET_OF(16, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15}, {V16})
+
 #define CREATE_HASH_SET_17(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17) \
-        NEW_HASH_SET_OF(17, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17)
+        NEW_HASH_SET_OF(17, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15}, {V16}, {V17})
+
 #define CREATE_HASH_SET_18(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18) \
-        NEW_HASH_SET_OF(18, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18)
+        NEW_HASH_SET_OF(18, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15}, {V16}, {V17}, {V18})
+
 #define CREATE_HASH_SET_19(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19) \
-        NEW_HASH_SET_OF(19, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19)
+        NEW_HASH_SET_OF(19, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15}, {V16}, {V17}, {V18}, {V19})
+
 #define CREATE_HASH_SET_20(NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20) \
-        NEW_HASH_SET_OF(20, NAME, V1, V2, V3, V4, V5, V6, V7, V8, V9, V10, V11, V12, V13, V14, V15, V16, V17, V18, V19, V20)
+        NEW_HASH_SET_OF(20, NAME, {V1}, {V2}, {V3}, {V4}, {V5}, {V6}, {V7}, {V8}, {V9}, {V10}, {V11}, {V12}, {V13}, {V14}, {V15}, {V16}, {V17}, {V18}, {V19}, {V20})
 
 #define GET_CREATE_HASH_SET_MACRO(NAME, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, FUN, ...) FUN
 
