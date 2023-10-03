@@ -139,10 +139,13 @@ static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGet)(HASH_MAP_
     return (VALUE_TYPE) {0};        \
 }                                   \
 \
-static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGetOrDefault)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE defaultValue) {  \
-    HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key); \
-    return !entry->isEmptySlot ? entry->value : defaultValue;    \
-}   \
+static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapGetOrDefault)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key, VALUE_TYPE defaultValue) {                                                                 \
+    if (HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(map)) { \
+        HASH_MAP_ENTRY_TYPEDEF(KEY_NAME, VALUE_NAME) *entry = HASH_MAP_METHOD(find, KEY_NAME, VALUE_NAME, MapEntry)(map, key); \
+        return !entry->isEmptySlot ? entry->value : defaultValue;      \
+    }                               \
+    return (VALUE_TYPE) {0};        \
+}                                   \
 \
 static inline VALUE_TYPE HASH_MAP_METHOD(KEY_NAME, VALUE_NAME, MapRemove)(HASH_MAP_TYPEDEF(KEY_NAME, VALUE_NAME) *map, KEY_TYPE key) { \
     if (HASH_MAP_METHOD(is, KEY_NAME, VALUE_NAME, MapNotEmpty)(map)) {                                                          \

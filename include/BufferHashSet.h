@@ -122,10 +122,13 @@ static inline bool HASH_SET_METHOD(is, NAME, SetNotEmpty)(HASH_SET_TYPEDEF(NAME)
     return !HASH_SET_METHOD(is, NAME, SetEmpty)(set);        \
 }   \
 \
-static inline bool HASH_SET_METHOD(NAME, SetContains)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
-    HASH_SET_ENTRY_TYPEDEF(NAME) *entry = HASH_SET_METHOD(find, NAME, SetEntry)(set, value); \
-    return !entry->isEmptySlot;     \
-}  \
+static inline bool HASH_SET_METHOD(NAME, SetContains)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) {  \
+    if (HASH_SET_METHOD(is, NAME, SetNotEmpty)(set)) {               \
+        HASH_SET_ENTRY_TYPEDEF(NAME) *entry = HASH_SET_METHOD(find, NAME, SetEntry)(set, value); \
+        return !entry->isEmptySlot;     \
+    }               \
+    return false;   \
+}                   \
 \
 static inline bool HASH_SET_METHOD(NAME, SetRemove)(HASH_SET_TYPEDEF(NAME) *set, TYPE value) { \
     if (HASH_SET_METHOD(is, NAME, SetNotEmpty)(set)) {                                                          \
