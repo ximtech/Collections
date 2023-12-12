@@ -266,8 +266,8 @@ static MunitTest bufferVectorDeqTests[] = {
         {.name =  "Test <type>VecDeqRemoveLast() - should correctly remove last vector element", .test = testBuffVecDeqRemoveLast},
         {.name =  "Test is<type>VecDeqEmpty()/Not - should correctly check deq vector emptiness", .test = testBuffVecDeqEmpty},
         {.name =  "Test <type>VecDeqContains() - should check that vector have element", .test = testBuffVecDeqContains},
-//        {.name =  "Test <type>VecDeqRemoveFirstOccur() - should remove head element and shift array", .test = testBuffVecDeqRemoveFirstOccur},
-//        {.name =  "Test <type>VecDeqRemoveLastOccur() - should remove tail element and shift array", .test = testBuffVecDeqRemoveLastOccur},
+        {.name =  "Test <type>VecDeqRemoveFirstOccur() - should remove head element and shift array", .test = testBuffVecDeqRemoveFirstOccur},
+        {.name =  "Test <type>VecDeqRemoveLastOccur() - should remove tail element and shift array", .test = testBuffVecDeqRemoveLastOccur},
 
         END_OF_TESTS
 };
