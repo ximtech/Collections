@@ -16,12 +16,9 @@ int main(int argc, char *argv[MUNIT_ARRAY_PARAM(argc + 1)]) {
             bufferVectorDeqTestSuite
     };
 
-    int result;
     for (int i = 0; i < ARRAY_SIZE(testSuitArray); i++) {
-        result = munit_suite_main(&testSuitArray[i], (void *) "µnit", argc, argv);
-        if (result != 0) {
-            break;
-        }
+        int result = munit_suite_main(&testSuitArray[i], (void *) "µnit", argc, argv);
+        if (result != EXIT_SUCCESS) return result;
     }
-    return result;
+    return EXIT_SUCCESS;
 }
