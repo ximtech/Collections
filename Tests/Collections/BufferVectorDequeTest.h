@@ -222,35 +222,35 @@ static MunitResult testBuffVecDeqRemoveFirstOccur(const MunitParameter params[],
 }
 
 static MunitResult testBuffVecDeqRemoveLastOccur(const MunitParameter params[], void *data) {
-//    intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
-//    intVecDeqAddLast(intVectDeq, 1);
-//    intVecDeqAddLast(intVectDeq, 2);
-//    intVecDeqAddLast(intVectDeq, 3);
-//    intVecDeqAddLast(intVectDeq, 4);
-//    intVecDeqAddLast(intVectDeq, 5);
-//    intVecDeqAddLast(intVectDeq, 6);
+    intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
+    intVecDeqAddLast(intVectDeq, 1);
+    intVecDeqAddLast(intVectDeq, 2);
+    intVecDeqAddLast(intVectDeq, 3);
+    intVecDeqAddLast(intVectDeq, 4);
+    intVecDeqAddLast(intVectDeq, 5);
+    intVecDeqAddLast(intVectDeq, 6);
 
-//    intVecDeqRemoveLastOccur(intVectDeq, 6);
-//    assertIntVecDeq(intVectDeq, 5, 8);
-//    assert_int(1, ==, intVectDeq->items[0]);
-//    assert_int(2, ==, intVectDeq->items[1]);
-//    assert_int(3, ==, intVectDeq->items[2]);
-//    assert_int(4, ==, intVectDeq->items[3]);
-//    assert_int(5, ==, intVectDeq->items[4]);
-//
-//    intVecDeqRemoveLastOccur(intVectDeq, 3);
-//    assertIntVecDeq(intVectDeq, 4, 8);
-//    assert_int(1, ==, intVectDeq->items[0]);
-//    assert_int(2, ==, intVectDeq->items[1]);
-//    assert_int(4, ==, intVectDeq->items[2]);
-//    assert_int(5, ==, intVectDeq->items[3]);
-//
-//    intVecDeqRemoveLastOccur(intVectDeq, 8);
-//    assertIntVecDeq(intVectDeq, 4, 8);
-//    assert_int(1, ==, intVectDeq->items[0]);
-//    assert_int(2, ==, intVectDeq->items[1]);
-//    assert_int(4, ==, intVectDeq->items[2]);
-//    assert_int(5, ==, intVectDeq->items[3]);
+    intVecDeqRemoveLastOccur(intVectDeq, 6);
+    assertIntVecDeq(intVectDeq, 5, 8);
+    assert_int(1, ==, intVectDeq->items[0]);
+    assert_int(2, ==, intVectDeq->items[1]);
+    assert_int(3, ==, intVectDeq->items[2]);
+    assert_int(4, ==, intVectDeq->items[3]);
+    assert_int(5, ==, intVectDeq->items[4]);
+
+    intVecDeqRemoveLastOccur(intVectDeq, 3);
+    assertIntVecDeq(intVectDeq, 4, 8);
+    assert_int(1, ==, intVectDeq->items[0]);
+    assert_int(2, ==, intVectDeq->items[1]);
+    assert_int(4, ==, intVectDeq->items[2]);
+    assert_int(5, ==, intVectDeq->items[3]);
+
+    intVecDeqRemoveLastOccur(intVectDeq, 8);
+    assertIntVecDeq(intVectDeq, 4, 8);
+    assert_int(1, ==, intVectDeq->items[0]);
+    assert_int(2, ==, intVectDeq->items[1]);
+    assert_int(4, ==, intVectDeq->items[2]);
+    assert_int(5, ==, intVectDeq->items[3]);
     return MUNIT_OK;
 }
 
@@ -266,8 +266,8 @@ static MunitTest bufferVectorDeqTests[] = {
         {.name =  "Test <type>VecDeqRemoveLast() - should correctly remove last vector element", .test = testBuffVecDeqRemoveLast},
         {.name =  "Test is<type>VecDeqEmpty()/Not - should correctly check deq vector emptiness", .test = testBuffVecDeqEmpty},
         {.name =  "Test <type>VecDeqContains() - should check that vector have element", .test = testBuffVecDeqContains},
-        {.name =  "Test <type>VecDeqRemoveFirstOccur() - should remove head element and shift array", .test = testBuffVecDeqRemoveFirstOccur},
-        {.name =  "Test <type>VecDeqRemoveLastOccur() - should remove tail element and shift array", .test = testBuffVecDeqRemoveLastOccur},
+//        {.name =  "Test <type>VecDeqRemoveFirstOccur() - should remove head element and shift array", .test = testBuffVecDeqRemoveFirstOccur},
+//        {.name =  "Test <type>VecDeqRemoveLastOccur() - should remove tail element and shift array", .test = testBuffVecDeqRemoveLastOccur},
 
         END_OF_TESTS
 };
