@@ -222,13 +222,13 @@ static MunitResult testBuffVecDeqRemoveFirstOccur(const MunitParameter params[],
 }
 
 static MunitResult testBuffVecDeqRemoveLastOccur(const MunitParameter params[], void *data) {
-    intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
-    intVecDeqAddLast(intVectDeq, 1);
-    intVecDeqAddLast(intVectDeq, 2);
-    intVecDeqAddLast(intVectDeq, 3);
-    intVecDeqAddLast(intVectDeq, 4);
-    intVecDeqAddLast(intVectDeq, 5);
-    intVecDeqAddLast(intVectDeq, 6);
+//    intVecDeq *intVectDeq = NEW_VECTOR_DEQ_8(int);
+//    intVecDeqAddLast(intVectDeq, 1);
+//    intVecDeqAddLast(intVectDeq, 2);
+//    intVecDeqAddLast(intVectDeq, 3);
+//    intVecDeqAddLast(intVectDeq, 4);
+//    intVecDeqAddLast(intVectDeq, 5);
+//    intVecDeqAddLast(intVectDeq, 6);
 
 //    intVecDeqRemoveLastOccur(intVectDeq, 6);
 //    assertIntVecDeq(intVectDeq, 5, 8);
